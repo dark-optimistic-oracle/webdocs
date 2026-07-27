@@ -101,7 +101,7 @@ The app reads the official Provable API to verify the program and obtain the cur
 - `new_voting_right`
 - `confirm`
 - `deny`
-- `collect_assertion_cost`
+- `collect_assertion_award`
 - `collect_dispute_award`
 - `collect_voting_award`
 - `refund_voting_right`
