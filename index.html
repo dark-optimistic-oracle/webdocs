@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Technical documentation for Dark Optimistic Oracle on Aleo." />
+    <meta property="og:title" content="Dark Optimistic Oracle Documentation" />
+    <meta property="og:description" content="Protocol lifecycle, privacy model, architecture, and integration guidance." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dark-optimistic-oracle.github.io/webdocs/" />
+    <link rel="icon" href="%BASE_URL%favicon.svg" />
+    <title>Docs | Dark Optimistic Oracle</title>
+  </head>
+  <body>
+    <div class="docs-shell">
+      <header>
+        <a class="brand" href="https://dark-optimistic-oracle.github.io/website/">
+          <span class="brand-mark" aria-hidden="true">D</span>
+          <span>Dark Optimistic Oracle</span>
+        </a>
+        <nav aria-label="Project navigation">
+          <a href="https://dark-optimistic-oracle.github.io/website/">Website</a>
+          <a href="https://dark-optimistic-oracle.github.io/webapp/">App</a>
+          <a aria-current="page" href="./">Docs</a>
+        </nav>
+      </header>
+
+      <div class="docs-layout">
+        <aside>
+          <span class="sidebar-title">Documentation</span>
+          <nav aria-label="Documentation sections">
+            <a href="#overview">Overview</a>
+            <a href="#lifecycle">Lifecycle</a>
+            <a href="#privacy">Privacy model</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#interface">Web interface</a>
+            <a href="#testnet">Aleo testnet</a>
+            <a href="#development">Development</a>
+            <a href="#roadmap">Roadmap</a>
+          </nav>
+        </aside>
+
+        <main>
+          <section class="docs-hero" id="overview">
+            <span class="eyebrow">Documentation</span>
+            <h1>Dark Optimistic Oracle</h1>
+            <p class="lead">
+              A privacy-preserving optimistic oracle that resolves disputed off-chain
+              assertions using Aleo private records and publicly verifiable aggregate state.
+            </p>
+            <div class="callout">
+              <strong>Current scope</strong>
+              <p>
+                The deployed interface targets the core assertion, dispute, vote, and settlement
+                program. Governance and cross-chain components are future integrations.
+              </p>
+            </div>
+          </section>
+
+          <section id="lifecycle">
+            <span class="eyebrow">Protocol</span>
+            <h2>Lifecycle</h2>
+            <ol class="steps">
+              <li>
+                <strong>Assert</strong>
+                <p>An asserter publishes an ID, title field, content hash, economic terms, and dispute and voting deadlines.</p>
+              </li>
+              <li>
+                <strong>Dispute</strong>
+                <p>A disputer challenges before the dispute deadline by posting the matching public DOOR amount.</p>
+              </li>
+              <li>
+                <strong>Vote</strong>
+                <p>A token holder spends a private DOOR record to create a voting right, then confirms or denies the assertion.</p>
+              </li>
+              <li>
+                <strong>Settle</strong>
+                <p>The program evaluates the public aggregate tally after the deadline and enforces eligible awards or refunds.</p>
+              </li>
+            </ol>
+          </section>
+
+          <section id="privacy">
+            <span class="eyebrow">Data visibility</span>
+            <h2>Privacy model</h2>
+            <p>
+              Dark Optimistic Oracle uses a hybrid design. Applications need public assertion
+              state and an observable result, while voters benefit from private ownership and
+              reward records.
+            </p>
+            <div class="comparison">
+              <article>
+                <h3>Public</h3>
+                <ul>
+                  <li>Assertion metadata and content hash</li>
+                  <li>Deadlines and stake parameters</li>
+                  <li>Asserter and disputer addresses</li>
+                  <li>Aggregate confirm and deny counters</li>
+                  <li>Program code and finalization rules</li>
+                </ul>
+              </article>
+              <article>
+                <h3>Private records</h3>
+                <ul>
+                  <li>Voting rights</li>
+                  <li>Vote receipts</li>
+                  <li>Voter token inputs and change</li>
+                  <li>Voter awards and unused-right refunds</li>
+                </ul>
+              </article>
+            </div>
+            <div class="callout caution">
+              <strong>Visibility boundary</strong>
+              <p>
+                Private Aleo records do not imply that every piece of transaction metadata is
+                hidden. Integrators should reason from the deployed program and Aleo network
+                semantics rather than treating “private voting” as a blanket anonymity claim.
+              </p>
+            </div>
+          </section>
+
+          <section id="architecture">
+            <span class="eyebrow">System design</span>
+            <h2>Architecture</h2>
+            <pre><code>Browser
+  ├─ Provable API → program availability, height, public mappings
+  └─ Shield wallet → authorization and transaction submission
+                         │
+                         ▼
+              dark_optimistic_oracle.aleo
+                         │
+                         ▼
+                  token_registry.aleo</code></pre>
+            <p>
+              The browser creates Aleo transaction requests and the wallet authorizes them. The
+              oracle program records public state and invokes the canonical token registry for
+              DOOR operations. Aleo proves private transition inputs without placing their
+              plaintext record contents in public mappings.
+            </p>
+          </section>
+
+          <section id="interface">
+            <span class="eyebrow">Web app</span>
+            <h2>Interface capabilities</h2>
+            <ul>
+              <li>Look up public assertion state by a known assertion ID.</li>
+              <li>Create an assertion after hashing claim text locally.</li>
+              <li>Challenge an assertion before its deadline.</li>
+              <li>Create a private voting right and submit confirm or deny transactions.</li>
+              <li>Submit settlement, private award, and refund transactions.</li>
+            </ul>
+            <p>
+              Aleo mappings are key-value stores and do not expose a complete assertion index.
+              Applications should preserve assertion IDs or provide an external index. The web
+              app does not upload or store the original claim text; only its derived field is
+              submitted, so the source text and encoding must be retained elsewhere.
+            </p>
+            <a class="inline-button" href="https://dark-optimistic-oracle.github.io/webapp/">Open the testnet app</a>
+          </section>
+
+          <section id="testnet">
+            <span class="eyebrow">Network</span>
+            <h2>Aleo testnet</h2>
+            <p>The public interface expects:</p>
+            <ul>
+              <li><code>dark_optimistic_oracle.aleo</code> deployed from the core repository.</li>
+              <li>The canonical testnet <code>token_registry.aleo</code>.</li>
+              <li>Shield connected to Aleo testnet.</li>
+            </ul>
+            <p>
+              The app checks the oracle program and current height through the official Provable
+              API. Transaction controls remain disabled when testnet or the program cannot be
+              verified. The token-registry workaround repository is for local devnet use only.
+            </p>
+          </section>
+
+          <section id="development">
+            <span class="eyebrow">Reference</span>
+            <h2>Program calls</h2>
+            <div class="function-grid">
+              <code>create_assertion</code>
+              <code>dispute_assertion</code>
+              <code>new_voting_right</code>
+              <code>confirm</code>
+              <code>deny</code>
+              <code>collect_assertion_cost</code>
+              <code>collect_dispute_award</code>
+              <code>collect_voting_award</code>
+              <code>refund_voting_right</code>
+            </div>
+            <h3>Repositories</h3>
+            <ul>
+              <li><a href="https://github.com/dark-optimistic-oracle/core">Core Aleo program</a></li>
+              <li><a href="https://github.com/dark-optimistic-oracle/webapp">Web app</a></li>
+              <li><a href="https://github.com/dark-optimistic-oracle/website">Website</a></li>
+              <li><a href="https://github.com/dark-optimistic-oracle/token-registry-workaround">Local token-registry workaround</a></li>
+            </ul>
+          </section>
+
+          <section id="roadmap">
+            <span class="eyebrow">Future integrations</span>
+            <h2>Roadmap boundaries</h2>
+            <p>
+              The broader project design includes governance that can use the oracle for
+              decisions, bridge adapters that make results available on other networks, and
+              remote contracts that consume those results. These components require separate
+              design, security review, and deployment work and are not presented as current
+              product capabilities.
+            </p>
+          </section>
+        </main>
+      </div>
+
+      <footer>
+        <span>Dark Optimistic Oracle documentation</span>
+        <a href="https://dark-optimistic-oracle.github.io/website/">Back to website</a>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
