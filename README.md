@@ -106,6 +106,14 @@ deployment-capacity threshold and were aborted without fees. Treat the hosted
 oracle app as QA against the earlier contract until edition 1 is independently
 confirmed.
 
+Aleo's special upgrade-policy `constructor` cannot be changed, but the oracle's
+application function named `initialize` is not that constructor. Function and
+finalize logic may change when their public interfaces remain compatible. The
+candidate keeps the constructor byte-for-byte unchanged and preserves the
+initializer's types. A disposable Devnet edition-0 to edition-1 upgrade and
+post-upgrade initialization confirmed that the live blocker is Testnet block
+deployment capacity, not initializer immutability.
+
 ## Sample prediction market
 
 The prediction-market demonstration uses the oracle as its truth layer. It is a

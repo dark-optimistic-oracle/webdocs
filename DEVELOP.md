@@ -32,6 +32,11 @@ with sufficient deployment capacity. It contains no private credentials,
 personal data, business projections, market-size figures, or competitor
 comparisons.
 
+The 2026-08-15 upgrade-rule follow-up also documents that Aleo's immutable
+special `constructor` is distinct from the ordinary oracle function named
+`initialize`. The candidate preserves the constructor and initializer
+interfaces; a disposable Devnet upgrade confirmed the logic change is valid.
+
 ## Local development and validation
 
 ```bash
