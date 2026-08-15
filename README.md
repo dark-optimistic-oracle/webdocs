@@ -40,7 +40,11 @@ Private records include:
 - Voter token inputs and change.
 - Voter awards and unused-right refunds.
 
-Private records do not imply that every piece of transaction metadata is hidden. Integrators should derive their privacy expectations from the deployed program and Aleo network semantics.
+Voting-right purchase, voting, private voter-award, and unused-right-refund
+requests use private fees. Private records and a private fee can hide record
+ownership and the fee payer, but the selected `confirm` or `deny` transition and
+the aggregate counters remain public. Integrators should derive their privacy
+expectations from the deployed program and Aleo network semantics.
 
 ## Claim content
 
@@ -94,6 +98,35 @@ The hosted app expects:
 
 The app reads the official Provable API to verify the program and obtain the current height. The `token-registry-workaround` repository is only needed for a local devnet.
 
+As of the 2026-08-15 verification, `doo_prediction_market.aleo` is accepted at
+edition 1 with existing market state preserved. The audited oracle edition-1
+candidate is committed and tested, but the public oracle remains at edition 0:
+its large upgrade transactions landed in Testnet blocks below the consensus
+deployment-capacity threshold and were aborted without fees. Treat the hosted
+oracle app as QA against the earlier contract until edition 1 is independently
+confirmed.
+
+## Sample prediction market
+
+The prediction-market demonstration uses the oracle as its truth layer. It is a
+separate GitHub Pages site containing its explanation, interface, and bundled
+contract source.
+
+For each market `<x>`, the market registers two independent token-registry
+assets, `YES<x>` and `NO<x>`. They are not DOOR. Public credits provide neutral
+collateral; DOOR is used only for oracle bonds and voting. Settlement accepts a
+post-close oracle assertion whose title and canonical claim hash bind it to the
+market. The actual settlement assertion is recorded even when it differs from
+the suggested ID stored at market creation.
+
+After a valid outcome is settled, the losing outcome token has no redemption
+path and is worth zero to this contract. Winning tokens burn for a proportional
+share of the complete remaining collateral pool, so the winning supply assumes
+the collateral value previously backing both outcomes.
+
+- Demo: https://dark-optimistic-oracle.github.io/predmkt/
+- Source and audit: https://github.com/dark-optimistic-oracle/predmkt
+
 ## Program calls
 
 - `create_assertion`
@@ -106,6 +139,15 @@ The app reads the official Provable API to verify the program and obtain the cur
 - `collect_voting_award`
 - `refund_voting_right`
 
+## Audit evidence
+
+The three implementation repositories maintain dated `AUDIT.md` chapters with
+findings, dispositions, verification limits, and upgrade status. The webapp and
+prediction-market repositories also maintain `LOG.md` with human-readable Aleo
+read/transaction sequences, public parameters, accepted transaction IDs, and
+failed or aborted attempts. Browser exports are client-generated diagnostic
+evidence and must be checked against on-chain transactions and mappings.
+
 ## Current scope and roadmap
 
 The current product surface covers the core assertion, dispute, private-record voting, and settlement lifecycle.
@@ -115,6 +157,10 @@ Governance, cross-chain bridges, foreign-chain contracts, and remote assertion c
 ## Local development
 
 For the oracle program and local network, follow the `core` repository documentation. The local token-registry workaround is not part of the public testnet deployment.
+
+Public contract builds and upgrades require Leo 4.4.1. Deployment wrappers
+refuse older versions; set `LEO_BIN=/path/to/leo-4.4.1` when that binary is not
+the default `leo` on `PATH`. Mainnet workflows remain locked and were not used.
 
 For this documentation site:
 

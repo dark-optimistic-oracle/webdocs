@@ -34,7 +34,9 @@
             <a href="#privacy">Privacy model</a>
             <a href="#architecture">Architecture</a>
             <a href="#interface">Web interface</a>
+            <a href="#prediction-market">Prediction market</a>
             <a href="#testnet">Aleo testnet</a>
+            <a href="#audit">Audit evidence</a>
             <a href="#development">Development</a>
             <a href="#roadmap">Roadmap</a>
           </nav>
@@ -113,10 +115,31 @@
               <strong>Visibility boundary</strong>
               <p>
                 Private Aleo records do not imply that every piece of transaction metadata is
-                hidden. Integrators should reason from the deployed program and Aleo network
+                hidden. Voting-related record calls use private fees, but the selected
+                <code>confirm</code> or <code>deny</code> transition and aggregate counters remain
+                public. Integrators should reason from the deployed program and Aleo network
                 semantics rather than treating “private voting” as a blanket anonymity claim.
               </p>
             </div>
+          </section>
+
+          <section id="prediction-market">
+            <span class="eyebrow">Sample integration</span>
+            <h2>Prediction market</h2>
+            <p>
+              The sample market uses the oracle only to determine truth. For market
+              <code>&lt;x&gt;</code>, it registers independent <code>YES&lt;x&gt;</code> and
+              <code>NO&lt;x&gt;</code> assets backed by public-credit collateral. These outcome assets
+              are not DOOR; DOOR is used for oracle assertion, dispute, and voting incentives.
+            </p>
+            <p>
+              Settlement accepts a post-close assertion whose market title and selected claim
+              hash match the canonical YES or NO claim. The actual settlement assertion is
+              recorded. Losing tokens have no redemption path; winning tokens burn for their
+              proportional share of all remaining collateral, so the winning supply assumes the
+              collateral value that backed both outcomes.
+            </p>
+            <a class="inline-button" href="https://dark-optimistic-oracle.github.io/predmkt/">Open the prediction-market demo</a>
           </section>
 
           <section id="architecture">
@@ -172,6 +195,28 @@
               API. Transaction controls remain disabled when testnet or the program cannot be
               verified. The token-registry workaround repository is for local devnet use only.
             </p>
+            <div class="callout caution">
+              <strong>Verified deployment status — 2026-08-15</strong>
+              <p>
+                The prediction market is accepted at edition 1 with prior state preserved. The
+                audited oracle candidate is committed and tested, but the public oracle remains
+                at edition 0 after Testnet capacity aborted its large upgrade transactions without
+                charging fees. Treat the oracle app as QA against the earlier contract until
+                edition 1 is independently confirmed.
+              </p>
+            </div>
+          </section>
+
+          <section id="audit">
+            <span class="eyebrow">Verification</span>
+            <h2>Audit and call evidence</h2>
+            <p>
+              Each implementation repository keeps dated <code>AUDIT.md</code> chapters with
+              findings, fixes, residual risks, and test limits. The app repositories also keep
+              <code>LOG.md</code> files with readable Aleo calls, public parameters, accepted IDs,
+              and failed or aborted experiments. Browser exports are client-generated evidence;
+              auditors must verify transaction IDs and final mappings on-chain.
+            </p>
           </section>
 
           <section id="development">
@@ -183,7 +228,7 @@
               <code>new_voting_right</code>
               <code>confirm</code>
               <code>deny</code>
-              <code>collect_assertion_cost</code>
+              <code>collect_assertion_award</code>
               <code>collect_dispute_award</code>
               <code>collect_voting_award</code>
               <code>refund_voting_right</code>
@@ -193,6 +238,7 @@
               <li><a href="https://github.com/dark-optimistic-oracle/core">Core Aleo program</a></li>
               <li><a href="https://github.com/dark-optimistic-oracle/webapp">Web app</a></li>
               <li><a href="https://github.com/dark-optimistic-oracle/website">Website</a></li>
+              <li><a href="https://github.com/dark-optimistic-oracle/predmkt">Prediction-market demo and contracts</a></li>
               <li><a href="https://github.com/dark-optimistic-oracle/token-registry-workaround">Local token-registry workaround</a></li>
             </ul>
           </section>

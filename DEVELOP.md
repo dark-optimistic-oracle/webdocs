@@ -1,6 +1,6 @@
 # Development Notes
 
-Last updated: 2026-07-27
+Last updated: 2026-08-15
 
 ## Responsibility
 
@@ -23,6 +23,14 @@ figures, and comparisons reserved for a future white paper.
 The documented oracle ABI must remain synchronized with `core/src/main.leo`.
 The current asserter settlement call is `collect_assertion_award`, not the
 retired `collect_assertion_cost`.
+
+The 2026-08-15 update documents the exact private-fee boundary, the independent
+YES/NO outcome-token semantics, actual-assertion settlement binding, dated audit
+and call-log evidence, Leo 4.4.1 deployment requirement, and the verified split
+Testnet status: prediction market edition 1, oracle edition 0 pending a block
+with sufficient deployment capacity. It contains no private credentials,
+personal data, business projections, market-size figures, or competitor
+comparisons.
 
 ## Local development and validation
 
