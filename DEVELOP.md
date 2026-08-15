@@ -26,9 +26,9 @@ retired `collect_assertion_cost`.
 
 The 2026-08-15 update documents the exact private-fee boundary, the independent
 YES/NO outcome-token semantics, actual-assertion settlement binding, dated audit
-and call-log evidence, Leo 4.4.1 deployment requirement, and the verified split
-Testnet status: prediction market edition 1, oracle edition 0 pending a block
-with sufficient deployment capacity. It contains no private credentials,
+and call-log evidence, Leo 4.4.1 deployment requirement, and the verified
+Testnet status: both the prediction market and oracle are accepted at edition
+1 with prior state preserved. It contains no private credentials,
 personal data, business projections, market-size figures, or competitor
 comparisons.
 
@@ -36,6 +36,9 @@ The 2026-08-15 upgrade-rule follow-up also documents that Aleo's immutable
 special `constructor` is distinct from the ordinary oracle function named
 `initialize`. The candidate preserves the constructor and initializer
 interfaces; a disposable Devnet upgrade confirmed the logic change is valid.
+The public oracle upgrade was subsequently accepted in block `18745064` and
+transaction
+`at1900gz2klm9we2deqarpv2fpqhnjqjr3cvr43stxq4525l6s9zupq6r0v5p`.
 
 ## Local development and validation
 

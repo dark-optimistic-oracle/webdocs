@@ -98,21 +98,20 @@ The hosted app expects:
 
 The app reads the official Provable API to verify the program and obtain the current height. The `token-registry-workaround` repository is only needed for a local devnet.
 
-As of the 2026-08-15 verification, `doo_prediction_market.aleo` is accepted at
-edition 1 with existing market state preserved. The audited oracle edition-1
-candidate is committed and tested, but the public oracle remains at edition 0:
-its large upgrade transactions landed in Testnet blocks below the consensus
-deployment-capacity threshold and were aborted without fees. Treat the hosted
-oracle app as QA against the earlier contract until edition 1 is independently
-confirmed.
+As of the 2026-08-15 verification, both `doo_prediction_market.aleo` and
+`dark_optimistic_oracle.aleo` are accepted at edition 1 with existing state
+preserved. The oracle upgrade was accepted in transaction
+`at1900gz2klm9we2deqarpv2fpqhnjqjr3cvr43stxq4525l6s9zupq6r0v5p` after landing
+in a 78-certificate block. Its administrator and voting-cutoff remediations are
+therefore active on Testnet, and initialization was not repeated.
 
 Aleo's special upgrade-policy `constructor` cannot be changed, but the oracle's
 application function named `initialize` is not that constructor. Function and
 finalize logic may change when their public interfaces remain compatible. The
 candidate keeps the constructor byte-for-byte unchanged and preserves the
 initializer's types. A disposable Devnet edition-0 to edition-1 upgrade and
-post-upgrade initialization confirmed that the live blocker is Testnet block
-deployment capacity, not initializer immutability.
+post-upgrade initialization first confirmed compatibility; the later public
+edition-1 acceptance confirms that `initialize` was not an upgrade obstacle.
 
 ## Sample prediction market
 
